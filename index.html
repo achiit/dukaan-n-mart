@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>N-Mart – Online Shopping</title>
+<style>
+:root{--g:#0f5c4d;--g2:#0b463b;--y:#f5a524;--bg:#f2f6f5;--card:#fff;--t:#17231f;--m:#5d6c67;--b:#dde6e3;--r:14px;--red:#d63c3c}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t);line-height:1.5}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+/* header */
+header{background:var(--g);position:sticky;top:0;z-index:20}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 0;flex-wrap:wrap}
+.logo{font-size:1.6rem;font-weight:800;color:#fff;background:none;letter-spacing:-.5px}
+.logo b{color:var(--y)}
+.search{flex:1 1 100%;order:3;display:flex}
+.search input{flex:1;min-width:0;padding:12px 14px;border-radius:10px 0 0 10px;border:0}
+.search button{background:var(--y);padding:0 16px;border-radius:0 10px 10px 0;font-weight:700}
+nav{display:none}
+nav a,.mnav a{color:#fff;text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer;display:block}
+nav a:hover,.mnav a:hover{background:var(--g2)}
+.sp{flex:1}
+.ic{background:var(--g2);color:#fff;border-radius:10px;min-width:46px;height:46px;font-size:1.2rem;position:relative}
+.badge{position:absolute;top:-6px;right:-6px;background:var(--y);color:#000;font-size:.75rem;font-weight:800;border-radius:99px;min-width:22px;height:22px;display:grid;place-items:center}
+.mnav{display:none;padding-bottom:10px}.mnav.open{display:block}
+@media(min-width:800px){nav{display:flex;gap:4px}.search{order:0;flex:1 1 300px;max-width:480px}.burger{display:none}.mnav{display:none!important}.sp{display:none}}
+/* hero */
+.hero{background:linear-gradient(120deg,var(--g),#1b7a64);color:#fff;border-radius:22px;margin:16px 0;padding:36px 22px;display:grid;gap:18px;align-items:center;overflow:hidden}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);line-height:1.15;max-width:15ch}
+.hero p{max-width:44ch;opacity:.92;margin:10px 0 20px}
+.hero .art{font-size:5rem;letter-spacing:8px;text-align:center}
+@media(min-width:800px){.hero{grid-template-columns:1.3fr 1fr;padding:56px}.hero .art{font-size:7rem}}
+.btn{display:inline-block;padding:13px 22px;border-radius:12px;font-weight:700;min-height:48px;text-align:center;text-decoration:none}
+.btn.y{background:var(--y);color:#1a1200}.btn.g{background:var(--g);color:#fff}.btn.o{background:#fff;color:var(--g);border:2px solid var(--g)}
+.btn.big{width:100%;font-size:1.15rem;padding:16px}
+.btn:hover{filter:brightness(.95)}
+/* sections */
+section.s{margin:30px 0}
+h2{font-size:1.4rem;margin-bottom:14px}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:700px){.cats{grid-template-columns:repeat(5,1fr)}}
+.cat{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:14px 6px;text-align:center;font-weight:600;font-size:.88rem}
+.cat span{display:block;font-size:1.9rem}
+.cat:hover{border-color:var(--g)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px}
+.chip{background:#fff;border:1px solid var(--b);border-radius:99px;padding:9px 16px;white-space:nowrap;font-weight:600;min-height:42px}
+.chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr);gap:16px}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+.pc{background:var(--card);border-radius:var(--r);border:1px solid var(--b);overflow:hidden;display:flex;flex-direction:column;position:relative}
+.pimg{aspect-ratio:1;display:grid;place-items:center;font-size:3.6rem;cursor:pointer;width:100%}
+.pimg img{width:100%;height:100%;object-fit:cover}
+.off{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-size:.75rem;font-weight:700;padding:3px 8px;border-radius:99px}
+.pb{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pcat{font-size:.75rem;color:var(--m)}
+.pn{font-weight:700;font-size:.95rem;cursor:pointer;line-height:1.3}
+.pd{font-size:.82rem;color:var(--m)}
+.pr{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.pr b{font-size:1.15rem}.pr s{color:var(--m);font-size:.85rem}.pr em{font-style:normal;color:var(--g);font-weight:700;font-size:.82rem}
+.acts{display:grid;gap:6px;margin-top:auto;padding-top:8px}
+.acts .btn{padding:10px;min-height:44px;font-size:.9rem}
+@media(min-width:420px){.acts{grid-template-columns:1fr 1fr}}
+.empty{grid-column:1/-1;text-align:center;padding:40px 10px;color:var(--m);background:#fff;border-radius:var(--r)}
+.why{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:800px){.why{grid-template-columns:repeat(4,1fr)}}
+.why div{background:#fff;border-radius:var(--r);padding:18px;border:1px solid var(--b)}
+.why span{font-size:1.8rem}.why h3{font-size:1rem;margin:4px 0}.why p{font-size:.86rem;color:var(--m)}
+.easy{background:var(--g2);color:#fff;border-radius:22px;padding:26px 20px}
+.easy ol{display:grid;gap:10px;margin-top:12px;padding-left:20px}
+@media(min-width:800px){.easy ol{grid-template-columns:repeat(5,1fr);padding:0;list-style-position:inside}}
+footer{background:var(--g2);color:#cfe3de;margin-top:40px;padding:28px 0;font-size:.9rem}
+footer .logo{font-size:1.3rem}
+/* cart & checkout */
+.box{background:#fff;border-radius:var(--r);border:1px solid var(--b);padding:16px}
+.layout{display:grid;gap:16px}
+@media(min-width:850px){.layout{grid-template-columns:1.6fr 1fr;align-items:start}}
+.ci{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--b)}
+.ci:last-child{border:0}
+.ci .th{width:64px;height:64px;border-radius:10px;display:grid;place-items:center;font-size:1.8rem;overflow:hidden}
+.ci .th img{width:100%;height:100%;object-fit:cover}
+.ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
+.qty{display:flex;align-items:center;border:1px solid var(--b);border-radius:10px;overflow:hidden}
+.qty button{width:42px;height:42px;background:#f2f6f5;font-size:1.2rem;font-weight:700}
+.qty span{min-width:38px;text-align:center;font-weight:700}
+.rm{background:none;color:var(--red);font-weight:600;min-height:42px;padding:0 6px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:6px 0}
+.row.t{font-size:1.2rem;font-weight:800;border-top:2px dashed var(--b);margin-top:8px;padding-top:12px}
+.form{display:grid;gap:14px}
+.f label{display:block;font-weight:600;font-size:.9rem;margin-bottom:4px}
+.f input,.f textarea{width:100%;padding:13px;border:1.5px solid var(--b);border-radius:10px;font-size:1rem}
+.f input:focus,.f textarea:focus{border-color:var(--g);outline:0}
+.f .er{color:var(--red);font-size:.8rem;display:none}
+.f.bad .er{display:block}.f.bad input,.f.bad textarea{border-color:var(--red)}
+.two{display:grid;gap:14px}
+@media(min-width:560px){.two{grid-template-columns:1fr 1fr}}
+.ty{text-align:center;max-width:640px;margin:20px auto}
+.tick{width:72px;height:72px;border-radius:50%;background:var(--g);color:#fff;font-size:2.4rem;display:grid;place-items:center;margin:0 auto 12px}
+.ty .box{text-align:left;margin:16px 0}
+.note{background:#fff7e0;border:1px solid #f1d58a;border-radius:10px;padding:10px 12px;font-size:.85rem;margin:12px 0}
+.view{display:none}.view.on{display:block}
+/* modal & toast */
+.md{position:fixed;inset:0;background:#000a;z-index:50;display:none;align-items:flex-end;justify-content:center}
+.md.on{display:flex}
+.md>div{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px}
+@media(min-width:600px){.md{align-items:center}.md>div{border-radius:22px}}
+.md ul{padding-left:20px;margin:8px 0 14px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--t);color:#fff;padding:12px 18px;border-radius:12px;z-index:60;display:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="wrap">
+  <div class="bar">
+   <button class="ic burger" aria-label="Open menu" onclick="document.getElementById('mnav').classList.toggle('open')">☰</button>
+   <button class="logo" onclick="go('home')">N-<b>Mart</b></button>
+   <nav aria-label="Main">
+    <a onclick="go('home')">Home</a><a onclick="go('shop')">Shop</a><a onclick="go('shop',true)">Categories</a>
+   </nav>
+   <div class="sp"></div>
+   <form class="search" onsubmit="event.preventDefault();doSearch()" role="search">
+    <input id="q" type="search" placeholder="Search products" aria-label="Search products" oninput="doSearch()">
+    <button type="submit">Search</button>
+   </form>
+   <button class="ic" aria-label="Open cart" onclick="go('cart')">🛒<span class="badge" id="cnt">0</span></button>
+  </div>
+  <div class="mnav" id="mnav">
+   <a onclick="go('home')">Home</a><a onclick="go('shop')">Shop</a><a onclick="go('shop',true)">Categories</a><a onclick="go('cart')">Cart</a>
+  </div>
+ </div>
+</header>
+
+<main class="wrap">
+
+ <!-- HOME -->
+ <div class="view on" id="v-home">
+  <div class="hero">
+   <div>
+    <h1>Everyday essentials, simply delivered.</h1>
+    <p>Electronics, kitchen, tools, car care and more – pick what you need and place your order in a minute.</p>
+    <button class="btn y" onclick="go('shop')">Shop Now</button>
+   </div>
+   <div class="art" aria-hidden="true">🛍️🎧🔧</div>
+  </div>
+  <section class="s"><h2>Shop by category</h2><div class="cats" id="homeCats"></div></section>
+  <section class="s"><h2>Popular products</h2><div class="grid" id="popular"></div></section>
+  <section class="s"><h2>Why choose N-Mart</h2>
+   <div class="why">
+    <div><span>🏷️</span><h3>Clear pricing</h3><p>MRP, selling price and discount shown on every product.</p></div>
+    <div><span>🧺</span><h3>Wide range</h3><p>Nine categories for home, work, car and garden.</p></div>
+    <div><span>📱</span><h3>Phone friendly</h3><p>Large buttons and simple forms made for mobile.</p></div>
+    <div><span>🔍</span><h3>Quick search</h3><p>Find what you need by name or category.</p></div>
+   </div>
+  </section>
+  <section class="s easy"><h2>Shopping made easy</h2>
+   <ol><li>Browse products</li><li>Add to cart</li><li>Tap Place Order</li><li>Enter delivery details</li><li>See your order summary</li></ol>
+  </section>
+ </div>
+
+ <!-- SHOP -->
+ <div class="view" id="v-shop">
+  <h2 style="margin-top:18px" id="shopTitle">All products</h2>
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="shopGrid"></div>
+ </div>
+
+ <!-- CART -->
+ <div class="view" id="v-cart">
+  <h2 style="margin-top:18px">Your cart</h2>
+  <div class="layout">
+   <div class="box" id="cartItems"></div>
+   <div class="box" id="cartSum"></div>
+  </div>
+ </div>
+
+ <!-- CHECKOUT -->
+ <div class="view" id="v-checkout">
+  <h2 style="margin-top:18px">Checkout</h2>
+  <div class="layout">
+   <form class="box form" id="orderForm" novalidate onsubmit="placeOrder(event)">
+    <h3>Customer details</h3>
+    <div class="f" data-f="name"><label for="name">Full name</label><input id="name" autocomplete="name"><div class="er">Enter your full name.</div></div>
+    <div class="f" data-f="mobile"><label for="mobile">Mobile number</label><input id="mobile" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10-digit number"><div class="er">Enter a valid 10-digit mobile number.</div></div>
+    <div class="f" data-f="address"><label for="address">Full delivery address</label><textarea id="address" rows="3" autocomplete="street-address" placeholder="House no., street, area, landmark"></textarea><div class="er">Enter your delivery address.</div></div>
+    <div class="two">
+     <div class="f" data-f="city"><label for="city">City</label><input id="city" autocomplete="address-level2"><div class="er">Enter your city.</div></div>
+     <div class="f" data-f="state"><label for="state">State</label><input id="state" autocomplete="address-level1"><div class="er">Enter your state.</div></div>
+    </div>
+    <div class="f" data-f="pin"><label for="pin">PIN code</label><input id="pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="6-digit PIN"><div class="er">Enter a valid 6-digit PIN code.</div></div>
+    <button class="btn y big" type="submit">PLACE ORDER</button>
+   </form>
+   <div class="box" id="coSum"></div>
+  </div>
+ </div>
+
+ <!-- CONFIRMATION -->
+ <div class="view" id="v-done"><div class="ty" id="doneBox"></div></div>
+</main>
+
+<footer>
+ <div class="wrap">
+  <div class="logo">N-<b>Mart</b></div>
+  <p style="margin:6px 0">Simple online shopping for everyday needs.</p>
+  <p>© <span id="yr"></span> N-Mart. All rights reserved.</p>
+ </div>
+</footer>
+
+<div class="md" id="md" onclick="if(event.target===this)closeM()"><div id="mdBody"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   PRODUCT LIST – EDIT HERE
+   id: unique number | image: put an image URL/path between
+   the quotes (leave "" to show the emoji icon instead)
+   mrp = original price, price = selling price (in ₹)
+   ===================================================== */
+const PRODUCTS = [
+ {id:1, name:"Bluetooth Wireless Earbuds", category:"Electronics", icon:"🎧", image:"", mrp:2999, price:999, popular:true, desc:"Clear sound with a charging case.", features:["Bluetooth 5.3","Up to 20 hrs with case","Built-in mic","Touch controls"]},
+ {id:2, name:"20000mAh Power Bank", category:"Electronics", icon:"🔋", image:"", mrp:2499, price:1399, popular:true, desc:"Charge phones several times on one go.", features:["20000mAh capacity","Dual USB output","Fast charging","LED indicator"]},
+ {id:3, name:"Smart LED Desk Lamp", category:"Electronics", icon:"💡", image:"", mrp:1599, price:799, desc:"Adjustable lamp for study and work.", features:["3 colour modes","Touch dimmer","Flexible neck","USB powered"]},
+ {id:4, name:"Non-Stick Cookware Set", category:"Home & Kitchen", icon:"🍳", image:"", mrp:3499, price:1799, popular:true, desc:"3-piece set for everyday cooking.", features:["Non-stick coating","Cool-touch handles","Gas & induction ready","Easy to clean"]},
+ {id:5, name:"Insulated Steel Water Bottle", category:"Home & Kitchen", icon:"🧴", image:"", mrp:999, price:449, desc:"Keeps drinks hot or cold for hours.", features:["1 litre","Stainless steel","Leak-proof lid","BPA free"]},
+ {id:6, name:"Vegetable Chopper", category:"Home & Kitchen", icon:"🥕", image:"", mrp:899, price:399, desc:"Chop, slice and dice in seconds.", features:["Multiple blades","Large container","Easy to wash","Non-slip base"]},
+ {id:7, name:"Car Vacuum Cleaner", category:"Automobile Accessories", icon:"🚗", image:"", mrp:2299, price:1199, popular:true, desc:"Compact vacuum for car interiors.", features:["12V car socket","Strong suction","Long cable","Washable filter"]},
+ {id:8, name:"Car Phone Holder", category:"Automobile Accessories", icon:"📍", image:"", mrp:799, price:299, desc:"Firm dashboard and vent mount.", features:["360° rotation","Fits most phones","Strong grip","Easy install"]},
+ {id:9, name:"Microfibre Cleaning Cloths (Pack of 6)", category:"Cleaning", icon:"🧽", image:"", mrp:499, price:199, desc:"Soft, lint-free cloths for all surfaces.", features:["Pack of 6","Highly absorbent","Reusable","Scratch free"]},
+ {id:10, name:"Floor Cleaning Spin Mop", category:"Cleaning", icon:"🧹", image:"", mrp:2499, price:1299, desc:"Bucket mop with easy spin wringer.", features:["360° spin head","2 microfibre heads","Steel handle","Compact bucket"]},
+ {id:11, name:"Multi-Purpose Screwdriver Set (32 pcs)", category:"Tools", icon:"🔧", image:"", mrp:1299, price:599, popular:true, desc:"Precision set for home and electronics.", features:["32 bits","Magnetic tip","Carry case","Anti-slip grip"]},
+ {id:12, name:"Cordless Electric Drill Kit", category:"Tools", icon:"🛠️", image:"", mrp:4999, price:2799, desc:"Drill and drive with ease.", features:["Rechargeable battery","Variable speed","LED light","Includes drill bits"]},
+ {id:13, name:"Garden Pruning Shears", category:"Gardening", icon:"✂️", image:"", mrp:699, price:349, desc:"Sharp shears for plants and hedges.", features:["Steel blade","Comfort grip","Safety lock","Rust resistant"]},
+ {id:14, name:"Watering Spray Bottle (1L)", category:"Gardening", icon:"🌱", image:"", mrp:399, price:169, desc:"Fine mist for indoor and outdoor plants.", features:["1 litre","Adjustable nozzle","Durable plastic","Comfort trigger"]},
+ {id:15, name:"Set of 12 Planters", category:"Gardening", icon:"🪴", image:"", mrp:999, price:549, desc:"Small pots for herbs and succulents.", features:["Pack of 12","Drainage holes","UV protected","Lightweight"]},
+ {id:16, name:"Digital Kitchen Weighing Scale", category:"Daily Use", icon:"⚖️", image:"", mrp:1199, price:549, desc:"Accurate scale up to 10 kg.", features:["10 kg capacity","Clear LCD","Tare function","Battery included"]},
+ {id:17, name:"Travel Backpack (30L)", category:"Daily Use", icon:"🎒", image:"", mrp:1999, price:899, popular:true, desc:"Roomy bag for work, college and travel.", features:["30L capacity","Laptop sleeve","Water resistant","Padded straps"]},
+ {id:18, name:"Fast Charging Cable (Type-C, 1.5m)", category:"Mobile Accessories", icon:"🔌", image:"", mrp:599, price:199, desc:"Durable braided cable for quick charging.", features:["Braided nylon","Fast charge support","Data sync","1.5 metre"]},
+ {id:19, name:"Tempered Glass Screen Guard", category:"Mobile Accessories", icon:"📱", image:"", mrp:499, price:149, desc:"Protects against scratches and drops.", features:["9H hardness","Bubble free","Easy fit","Clear display"]},
+ {id:20, name:"Foldable Laptop Stand", category:"Other", icon:"💻", image:"", mrp:1499, price:699, desc:"Lightweight aluminium stand, adjustable height.", features:["Aluminium alloy","Adjustable angles","Folds flat","Fits up to 16\""]}
+];
+const CATEGORIES = [
+ {n:"Electronics",i:"🎧"},{n:"Home & Kitchen",i:"🍳"},{n:"Automobile Accessories",i:"🚗"},
+ {n:"Cleaning",i:"🧽"},{n:"Tools",i:"🔧"},{n:"Gardening",i:"🪴"},
+ {n:"Daily Use",i:"🎒"},{n:"Mobile Accessories",i:"📱"},{n:"Other",i:"📦"}
+];
+/* ===================== END OF EDIT AREA ===================== */
+
+const $ = id => document.getElementById(id);
+const inr = n => "₹" + n.toLocaleString("en-IN");
+const off = p => Math.round((1 - p.price / p.mrp) * 100);
+const find = id => PRODUCTS.find(p => p.id === id);
+const TINTS = ["#e3f4ef","#fdf0d5","#e6eefb","#fbe7e7","#efe7fb","#e8f6e0"];
+let cart = {}, cat = "All", last = null;
+try { cart = JSON.parse(localStorage.getItem("nmart-cart")) || {}; } catch (e) {}
+const save = () => { try { localStorage.setItem("nmart-cart", JSON.stringify(cart)); } catch (e) {} };
+
+function pic(p) {
+  return p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : p.icon;
+}
+function card(p) {
+  return `<article class="pc"><span class="off">${off(p)}% off</span>
+   <button class="pimg" style="background:${TINTS[p.id % TINTS.length]}" aria-label="View ${p.name}" onclick="openM(${p.id})">${pic(p)}</button>
+   <div class="pb"><span class="pcat">${p.category}</span><div class="pn" onclick="openM(${p.id})">${p.name}</div>
+   <div class="pd">${p.desc}</div>
+   <div class="pr"><b>${inr(p.price)}</b><s>${inr(p.mrp)}</s><em>${off(p)}% off</em></div>
+   <div class="acts"><button class="btn o" onclick="add(${p.id})">Add to Cart</button><button class="btn g" onclick="buyNow(${p.id})">Buy Now</button></div></div></article>`;
+}
+
+/* navigation */
+function go(v, toCats) {
+  document.querySelectorAll(".view").forEach(e => e.classList.remove("on"));
+  $("v-" + v).classList.add("on");
+  $("mnav").classList.remove("open");
+  if (v === "shop") { if (!$("q").value) renderShop(); }
+  if (v === "cart") renderCart();
+  if (v === "checkout") renderCheckout();
+  window.scrollTo(0, 0);
+  if (toCats) $("chips").scrollIntoView();
+}
+
+/* shop, search, filters */
+function renderShop() {
+  const q = $("q").value.trim().toLowerCase();
+  const list = PRODUCTS.filter(p =>
+    (cat === "All" || p.category === cat) &&
+    (!q || (p.name + " " + p.category + " " + p.desc).toLowerCase().includes(q)));
+  $("shopTitle").textContent = q ? `Results for "${$("q").value.trim()}"` : (cat === "All" ? "All products" : cat);
+  $("chips").innerHTML = ["All", ...CATEGORIES.map(c => c.n)].map(c =>
+    `<button class="chip ${c === cat ? "on" : ""}" onclick="setCat('${c.replace(/'/g, "\\'")}')">${c}</button>`).join("");
+  $("shopGrid").innerHTML = list.length ? list.map(card).join("") :
+    `<div class="empty"><h3>No products found</h3><p>Try a different word or choose another category.</p></div>`;
+}
+function setCat(c) { cat = c; go("shop"); renderShop(); }
+function doSearch() {
+  if (!$("v-shop").classList.contains("on")) go("shop");
+  renderShop();
+}
+
+/* cart */
+function add(id, silent) {
+  cart[id] = (cart[id] || 0) + 1; save(); updateCount();
+  if (!silent) toast(find(id).name + " added to cart");
+}
+function buyNow(id) { closeM(); add(id, true); go("checkout"); }
+function change(id, d) { cart[id] = (cart[id] || 0) + d; if (cart[id] <= 0) delete cart[id]; save(); updateCount(); renderCart(); }
+function remove(id) { delete cart[id]; save(); updateCount(); renderCart(); }
+const items = () => Object.keys(cart).map(id => ({p: find(+id), q: cart[id]}));
+const total = () => items().reduce((s, i) => s + i.p.price * i.q, 0);
+const saved = () => items().reduce((s, i) => s + (i.p.mrp - i.p.price) * i.q, 0);
+function updateCount() { $("cnt").textContent = items().reduce((s, i) => s + i.q, 0); }
+
+function renderCart() {
+  const it = items();
+  if (!it.length) {
+    $("cartItems").innerHTML = `<div class="empty" style="background:none"><h3>Your cart is empty</h3><p style="margin-bottom:14px">Add something you like to get started.</p><button class="btn g" onclick="go('shop')">Browse products</button></div>`;
+    $("cartSum").style.display = "none"; return;
+  }
+  $("cartSum").style.display = "block";
+  $("cartItems").innerHTML = it.map(({p, q}) => `<div class="ci">
+    <div class="th" style="background:${TINTS[p.id % TINTS.length]}">${pic(p)}</div>
+    <div><b>${p.name}</b><div class="pd">${inr(p.price)} each</div>
+    <div class="ctl"><div class="qty"><button aria-label="Decrease quantity" onclick="change(${p.id},-1)">−</button><span>${q}</span><button aria-label="Increase quantity" onclick="change(${p.id},1)">+</button></div>
+    <b>${inr(p.price * q)}</b><button class="rm" onclick="remove(${p.id})">Remove</button></div></div></div>`).join("");
+  $("cartSum").innerHTML = `<h3>Order total</h3>
+    <div class="row"><span>Subtotal</span><span>${inr(total())}</span></div>
+    <div class="row" style="color:var(--g)"><span>You save</span><span>${inr(saved())}</span></div>
+    <div class="row t"><span>Total</span><span>${inr(total())}</span></div>
+    <div style="display:grid;gap:8px;margin-top:12px"><button class="btn y" onclick="go('checkout')">Proceed to Checkout</button><button class="btn o" onclick="go('shop')">Continue Shopping</button></div>`;
+}
+
+/* checkout */
+function summaryHTML() {
+  return items().map(({p, q}) => `<div class="row"><span>${p.name} × ${q}<br><small style="color:var(--m)">${inr(p.price)} each</small></span><b>${inr(p.price * q)}</b></div>`).join("")
+    + `<div class="row t"><span>Total amount</span><span>${inr(total())}</span></div>`;
+}
+function renderCheckout() {
+  if (!items().length) { go("cart"); return; }
+  $("coSum").innerHTML = "<h3>Order summary</h3>" + summaryHTML();
+}
+const RULES = {
+  name: v => v.trim().length >= 2,
+  mobile: v => /^[6-9]\d{9}$/.test(v),
+  address: v => v.trim().length >= 8,
+  city: v => v.trim().length >= 2,
+  state: v => v.trim().length >= 2,
+  pin: v => /^[1-9]\d{5}$/.test(v)
+};
+function placeOrder(e) {
+  e.preventDefault();
+  let ok = true, first = null;
+  Object.keys(RULES).forEach(k => {
+    const good = RULES[k]($(k).value);
+    document.querySelector(`[data-f=${k}]`).classList.toggle("bad", !good);
+    if (!good) { ok = false; first = first || $(k); }
+  });
+  if (!ok) { first.focus(); return; }
+  const d = {}; Object.keys(RULES).forEach(k => d[k] = $(k).value.trim());
+  const no = "NM" + Date.now().toString().slice(-6) + Math.floor(100 + Math.random() * 900);
+  $("doneBox").innerHTML = `<div class="tick" aria-hidden="true">✓</div>
+   <h2>Thank You for Your Order!</h2>
+   <p>Order Number: <b>${no}</b></p>
+   <div class="note"><b>Demo only:</b> this is a frontend preview. Your order has not been sent to any server.</div>
+   <div class="box"><h3>Customer</h3><p>${esc(d.name)} · ${esc(d.mobile)}</p>
+    <h3 style="margin-top:12px">Delivery address</h3><p>${esc(d.address)}<br>${esc(d.city)}, ${esc(d.state)} – ${esc(d.pin)}</p></div>
+   <div class="box"><h3>Products ordered</h3>${summaryHTML()}</div>
+   <button class="btn g" onclick="go('home')">Continue Shopping</button>`;
+  cart = {}; save(); updateCount(); $("orderForm").reset(); go("done");
+}
+const esc = s => s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* product details popup */
+function openM(id) {
+  const p = find(id);
+  $("mdBody").innerHTML = `<div class="pimg" style="background:${TINTS[p.id % TINTS.length]};border-radius:14px;cursor:default;max-height:240px;aspect-ratio:auto;height:200px">${pic(p)}</div>
+   <p class="pcat" style="margin-top:10px">${p.category}</p><h2 style="margin:2px 0 4px">${p.name}</h2><p class="pd">${p.desc}</p>
+   <div class="pr" style="margin:8px 0"><b style="font-size:1.4rem">${inr(p.price)}</b><s>${inr(p.mrp)}</s><em>${off(p)}% off</em></div>
+   <b>Features</b><ul>${p.features.map(f => `<li>${f}</li>`).join("")}</ul>
+   <div class="acts"><button class="btn o" onclick="add(${p.id});closeM()">Add to Cart</button><button class="btn g" onclick="buyNow(${p.id})">Buy Now</button></div>
+   <button class="rm" style="width:100%;margin-top:8px;color:var(--m)" onclick="closeM()">Close</button>`;
+  $("md").classList.add("on");
+}
+function closeM() { $("md").classList.remove("on"); }
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeM(); });
+
+let tt;
+function toast(m) { const t = $("toast"); t.textContent = m; t.style.display = "block"; clearTimeout(tt); tt = setTimeout(() => t.style.display = "none", 1800); }
+
+/* init */
+$("homeCats").innerHTML = CATEGORIES.map(c => `<button class="cat" onclick="setCat('${c.n.replace(/'/g, "\\'")}')"><span>${c.i}</span>${c.n}</button>`).join("");
+$("popular").innerHTML = PRODUCTS.filter(p => p.popular).slice(0, 8).map(card).join("");
+$("yr").textContent = new Date().getFullYear();
+updateCount();
+</script>
+</body>
+</html>
